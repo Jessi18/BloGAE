@@ -29,32 +29,32 @@ class Entry(polymodel.PolyModel):
     tags = db.StringListProperty()
     hits = db.IntegerProperty(default=0)
     rate = db.FloatProperty(default=float(0))
-    
+
     @property
     def type(self):
         return self._TYPE
-        
+
     @property
     def mimetype(self):
         return self._MIMETYPE
-        
+
     @property
     def value(self):
         raise NotImplementedError
-        
+
     def toHTML(self):
         """
             Returns entry HTML presentation.
         """
         raise NotImplementedError
-        
+
     @property
     def url(self):
         """
             Returns a uri to entry.
         """
         return u'/entry/?k=%s' % self.key()
-        
+
     def asDict(self):
         """
             Returns a dict representacion of entry.
@@ -68,13 +68,13 @@ class Entry(polymodel.PolyModel):
             'tags': self.tags,
             'url': self.url,
         }
-        
+
     def toJSON(self):
         """
             Returns a JSON representation of entry.
         """
         return webapp2_extras.json.encode(self.asDict())
-        
+
     def add_rate(self, rate):
         """
             Adds one rate to total rating.
@@ -83,13 +83,13 @@ class Entry(polymodel.PolyModel):
         self.hits += 1
         self.put()
         return self.rate
-        
+
 class Tag(db.Model):
     """
         Tags registry.
     """
     tag = db.StringProperty(required=True)
-        
+
 class Comment(db.Model):
     """
         Post comment.
@@ -98,7 +98,7 @@ class Comment(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     updated = db.DateTimeProperty(auto_now=True)
     author = db.UserProperty(auto_current_user_add=True)
-    body = db.TextProperty(required=True)    
+    body = db.TextProperty(required=True)
 
 class TextPost(Entry):
     """
@@ -107,14 +107,14 @@ class TextPost(Entry):
     _TYPE = ENTRY_TYPE_TEXT
     _MIMETYPE = 'text/html'
     post = db.TextProperty()
-    
+
     def toHTML(self):
         return self.post
-        
+
     @property
     def value(self):
         return self.post
-    
+
 class PhotoPost(Entry):
     """
         Photo post.
@@ -122,11 +122,11 @@ class PhotoPost(Entry):
     _TYPE = ENTRY_TYPE_PHOTO
     _MIMETYPE = 'image/png'
     photo = db.BlobProperty()
-    
+
     def toHTML(self):
         tag = u'<img src="%s" alter="%s" title="%s" />'
         return tag % (self.url, self.title, self.title)
-    
+
     @property
     def value(self):
         return self.photo
@@ -138,11 +138,11 @@ class VideoPost(Entry):
     _TYPE = ENTRY_TYPE_VIDEO
     _MIMETYPE = 'text/html'
     video = db.LinkProperty()
-    
+
     def toHTML(self):
         tag = u'<iframe width="560" height="315" src="%s" frameborder="0" allowfullscreen></iframe>'
         return tag % self.video
-        
+
     @property
     def value(self):
         return ''

@@ -7,7 +7,7 @@
 <body>
 
 	<header>
-		<h1>{{ title }}</h1>
+		<h1>{{ title }} <a href="{% if user %}/admin/{% else %}{{ login_url }}{% endif %}" style="float:right;text-decoration:none;">{% if user %}Administrar{% else %}Login{% endif %}</a></h1>
 	</header>
 	<nav>
 		<ul>
@@ -24,7 +24,7 @@
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
 		<img src="/static/img/intro_flower.png" alt="Flower" />
 	</section>
-	
+
 	<div id="content">
 		<div id="mainContent">
 			<section>
@@ -89,7 +89,7 @@
 			</section>
 		</div>
 	</footer>
-	
+
 </body>
 </html>
 
